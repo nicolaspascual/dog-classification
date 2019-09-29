@@ -1,6 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name="test_mnist"
-#SBATCH --workdir=..
+#SBATCH --workdir=.
+#SBATCH --qos=training
 #SBATCH --ntasks=8
 #SBATCH --gres gpu:2
 #SBATCH --time=02:00:00
