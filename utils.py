@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from os import path
 import os
 from keras.models import model_from_json
+import pickle
 
 def plot_accuracy(history, base_folder='./'):
     make_base_folder_if_needed(base_folder)
@@ -34,6 +35,11 @@ def save_model(model, base_folder='./'):
             json_file.write(model_json)
     weights_file = path.join(base_folder, 'weights.hdf5')
     model.save_weights(weights_file, overwrite=True)
+
+def save_history(history, base_folder='./'):
+    make_base_folder_if_needed(base_folder)
+    with open(path.join(base_folder, 'history.pickle'), 'wb') as history_file:
+            pickle.dump(history, history_file)
 
 def make_base_folder_if_needed(base_folder):
     try:

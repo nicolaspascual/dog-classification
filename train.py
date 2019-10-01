@@ -1,5 +1,10 @@
 import datetime
+import sys
+from os import path
 out_file_name = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
+
+if len(sys.argv) > 1:
+    out_file_name = sys.argv[1]
 
 img_rows, img_cols, channels = 224, 224, 3
 input_shape = (img_rows, img_cols, channels)
@@ -20,12 +25,14 @@ history = model.fit_generator(generator=train_generator,
                     epochs=1
 )
 #Evaluate the model with test set
-score = model.evaluate_generator(generator=test_generator, steps=STEP_SIZE_VALID)
-print('test loss:', score[0])
-print('test accuracy:', score[1])
+STEP_SIZE_TEST=test_generator.n//test_generator.batch_size
+score = model.evaluate_generator(generator=test_generator, steps=STEP_SIZE_TEST)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
 
-from utils import plot_accuracy, plot_loss, save_model
+from utils import plot_accuracy, plot_loss, save_model, save_history
 
-plot_accuracy(history, f'./result/{out_file_name}')
-plot_loss(history, f'./result/{out_file_name}')
-save_model(model, f'./out/{out_file_name}/')
+plot_accuracy(history, path.join('./result/', out_file_name))
+plot_loss(history, path.join('./result/', out_file_name))
+save_model(model, path.join('./out/', out_file_name))
+save_history(history, path.join('./out/', out_file_name))
