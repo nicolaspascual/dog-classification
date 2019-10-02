@@ -6,11 +6,9 @@ out_file_name = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
 if len(sys.argv) > 1:
     out_file_name = sys.argv[1]
 
-img_rows, img_cols, channels = 224, 224, 3
-input_shape = (img_rows, img_cols, channels)
-
 from load_data import load_data
-train_generator, valid_generator, test_generator = load_data('./data/', img_rows, img_cols)
+train_generator, valid_generator, test_generator = load_data('./data/')
+input_shape = train_generator.image_shape
 
 from load_model import load_model
 model = load_model(input_shape)

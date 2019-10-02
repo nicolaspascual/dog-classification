@@ -19,5 +19,8 @@ queue-task:
 debug-task:
 	@ssh nct01011@mt1.bsc.es 'cd /home/nct01/nct01011/dogs-classification && ./launchers/launch.sh debug'
 
+view-queue:
+	@ssh -t nct01011@mt1.bsc.es "watch -n1 squeue"
+
 help:
 	@echo "run <make [download|upload]> to move files from/to server"

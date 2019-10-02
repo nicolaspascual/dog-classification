@@ -1,11 +1,26 @@
 from keras.preprocessing.image import ImageDataGenerator
 from os import path
 
-def load_data(base_folder, img_rows, img_cols):
+IMAGE_ROWS, IMAGE_COLS = 225, 300
 
-    train_generator = ImageDataGenerator(rescale=1./255).flow_from_directory(
+common_options = {
+    'rescale': 1./255
+}
+train_options = {
+    'rotation_range': 45,
+    'shear_range': 45,
+    'width_shift_range': 0.2,
+    'height_shift_range': 0.2,
+    'zoom_range': 0.2,
+    'horizontal_flip': True,
+    'vertical_flip': False
+}
+
+def load_data(base_folder):
+
+    train_generator = ImageDataGenerator(**{**common_options, **train_options}).flow_from_directory(
         directory=path.join(base_folder, 'train/'),
-        target_size=(img_rows, img_cols),
+        target_size=(IMAGE_ROWS, IMAGE_COLS),
         color_mode='rgb',
         batch_size=64,
         class_mode='categorical',
@@ -13,9 +28,9 @@ def load_data(base_folder, img_rows, img_cols):
         seed=42
     )
 
-    valid_generator = ImageDataGenerator(rescale=1./255).flow_from_directory(
+    valid_generator = ImageDataGenerator(**common_options).flow_from_directory(
         directory=path.join(base_folder, 'validation/'),
-        target_size=(img_rows, img_cols),
+        target_size=(IMAGE_ROWS, IMAGE_COLS),
         color_mode='rgb',
         batch_size=32,
         class_mode='categorical',
@@ -23,9 +38,9 @@ def load_data(base_folder, img_rows, img_cols):
         seed=42
     )
 
-    test_generator = ImageDataGenerator(rescale=1./255).flow_from_directory(
+    test_generator = ImageDataGenerator(**common_options).flow_from_directory(
         directory=path.join(base_folder, 'test/'),
-        target_size=(img_rows, img_cols),
+        target_size=(IMAGE_ROWS, IMAGE_COLS),
         color_mode='rgb',
         batch_size=1,
         class_mode='categorical',
