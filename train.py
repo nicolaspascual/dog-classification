@@ -22,7 +22,7 @@ history = model.fit_generator(generator=train_generator,
                     steps_per_epoch=STEP_SIZE_TRAIN,
                     validation_data=valid_generator,
                     validation_steps=STEP_SIZE_VALID,
-                    epochs=1
+                    epochs=40
 )
 #Evaluate the model with test set
 STEP_SIZE_TEST=test_generator.n//test_generator.batch_size
