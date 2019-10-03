@@ -6,19 +6,26 @@ IMAGE_ROWS, IMAGE_COLS = 225, 300
 common_options = {
     'rescale': 1./255
 }
-train_options = {
-    'rotation_range': 45,
-    'shear_range': 45,
+'''
+'rotation_range': 45,
+    'shear_range': 0.2,
     'width_shift_range': 0.2,
     'height_shift_range': 0.2,
     'zoom_range': 0.2,
     'horizontal_flip': True,
     'vertical_flip': False
+'''
+train_options = {
+    'shear_range': 0.2,
+    'zoom_range': 0.2,
+    'horizontal_flip': True
 }
 
 def load_data(base_folder):
 
-    train_generator = ImageDataGenerator(**{**common_options, **train_options}).flow_from_directory(
+    #train_generator = ImageDataGenerator(**{**common_options, **train_options}).flow_from_directory(
+    train_generator = ImageDataGenerator(**common_options).flow_from_directory(
+
         directory=path.join(base_folder, 'train/'),
         target_size=(IMAGE_ROWS, IMAGE_COLS),
         color_mode='rgb',
