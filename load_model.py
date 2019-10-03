@@ -15,7 +15,8 @@ def load_model(input_shape):
     model.add(Dense(200, activation='relu'))
     model.add(Dense(120, activation=(tf.nn.softmax)))
 
-    model.compile(optimizer='rmsprop',loss='categorical_crossentropy',metrics=['accuracy'])
+    optimizer = RMSprop(lr=5e-4)
+    model.compile(optimizer=optimizer,loss='categorical_crossentropy',metrics=['accuracy'])
     return model
 
 def load_model_1(input_shape):
