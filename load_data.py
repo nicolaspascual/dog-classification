@@ -23,9 +23,7 @@ train_options = {
 
 def load_data(base_folder):
 
-    #train_generator = ImageDataGenerator(**{**common_options, **train_options}).flow_from_directory(
-    train_generator = ImageDataGenerator(**common_options).flow_from_directory(
-
+    train_generator = ImageDataGenerator(**{**common_options, **train_options}).flow_from_directory(
         directory=path.join(base_folder, 'train/'),
         target_size=(IMAGE_ROWS, IMAGE_COLS),
         color_mode='rgb',

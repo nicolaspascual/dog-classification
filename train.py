@@ -1,7 +1,7 @@
 import datetime
 import sys
 from os import path
-from keras.callbacks import EarlyStopping
+from keras.callbacks import EarlyStopping, TensorBoard
 out_file_name = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
 
 if len(sys.argv) > 1:
@@ -18,12 +18,13 @@ model = load_model(input_shape)
 STEP_SIZE_TRAIN=train_generator.n//train_generator.batch_size
 STEP_SIZE_VALID=valid_generator.n//valid_generator.batch_size
 early_stopping = EarlyStopping(monitor='val_loss', min_delta=0.005, patience=5, verbose=0, mode='auto')
+tensorboard_callback = TensorBoard(log_dir=path.join('./out/', out_file_name, 'tensorboard.log'))
 history = model.fit_generator(generator=train_generator,
                     steps_per_epoch=STEP_SIZE_TRAIN,
                     validation_data=valid_generator,
                     validation_steps=STEP_SIZE_VALID,
-                    epochs=1,
-                    callbacks=[early_stopping]
+                    epochs=40,
+                    callbacks=[early_stopping, tensorboard_callback]
 )
 #Evaluate the model with test set
 STEP_SIZE_TEST=test_generator.n//test_generator.batch_size
