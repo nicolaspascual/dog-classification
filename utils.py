@@ -39,7 +39,12 @@ def save_model(model, base_folder='./'):
 def save_history(history, base_folder='./'):
     make_base_folder_if_needed(base_folder)
     with open(path.join(base_folder, 'history.pickle'), 'wb') as history_file:
-            pickle.dump(history, history_file)
+        pickle.dump({
+            'train_acc': history.history['acc'],
+            'train_loss': history.history['loss'],
+            'val_acc': history.history['val_acc'],
+            'val_loss': history.history['val_loss']
+        }, history_file)
 
 def make_base_folder_if_needed(base_folder):
     try:
