@@ -5,7 +5,7 @@ download:
 		--exclude out/ \
 		--exclude data/ \
 		--exclude __pycache__/ \
-		nct01013@dt01.bsc.es:/home/nct01/nct01013/dogs-classification/* .
+		nct01011@dt01.bsc.es:/home/nct01/nct01011/dogs-classification/* .
 
 upload:
 	@rsync -v -r -e ssh \
@@ -14,16 +14,16 @@ upload:
 		--exclude notebooks/ \
 		--exclude pictures/ \
 		--exclude .idea/ \
-		./ nct01013@dt01.bsc.es:/home/nct01/nct01013/dogs-classification
+		./ nct01011@dt01.bsc.es:/home/nct01/nct01011/dogs-classification
 
 queue-task:
-	@ssh nct01013@mt1.bsc.es 'cd /home/nct01/nct01013/dogs-classification && ./launchers/launch.sh train'
+	@ssh nct01011@mt1.bsc.es 'cd /home/nct01/nct01011/dogs-classification && ./launchers/launch.sh train'
 
 debug-task:
-	@ssh nct01013@mt1.bsc.es 'cd /home/nct01/nct01013/dogs-classification && ./launchers/launch.sh debug'
+	@ssh nct01011@mt1.bsc.es 'cd /home/nct01/nct01011/dogs-classification && ./launchers/launch.sh debug'
 
 view-queue:
-	@ssh -t nct01013@mt1.bsc.es "watch -n1 squeue"
+	@ssh -t nct01011@mt1.bsc.es "watch -n1 squeue"
 
 help:
 	@echo "run <make [download|upload]> to move files from/to server"
