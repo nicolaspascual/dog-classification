@@ -6,7 +6,7 @@ import tensorflow as tf
 
 def load_model(input_shape):
     """
-        Baseline + dropout only on FC layers + increasing lr
+        Baseline + dropout only on FC layers + increasing lr + 2019-10-04_08-37
     """
 
     model = Sequential()
@@ -36,7 +36,7 @@ def load_model(input_shape):
     model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
     return model
 
-def load_model(input_shape):
+def load_model_6(input_shape):
     """
         Baseline + dropout + reducing lr 2019-10-03_22-19
     """
