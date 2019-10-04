@@ -6,8 +6,69 @@ import tensorflow as tf
 
 def load_model(input_shape):
     """
-        Added dropout
+        Baseline + dropout only on FC layers + increasing lr
     """
+
+    model = Sequential()
+    model.add(Conv2D(64, (3, 3), activation='relu', input_shape=input_shape))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+
+    model.add(Conv2D(128, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.5))
+
+    model.add(Conv2D(256, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.5))
+
+
+    model.add(Flatten())
+    model.add(Dropout(0.5))
+    model.add(Dense(200, activation='relu'))
+    model.add(Dropout(0.4))
+
+
+    model.add(Dense(120, activation=(tf.nn.softmax)))
+    model.add(Dropout(0.2))
+
+
+    optimizer = RMSprop(lr=5e-3)
+    model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
+
+def load_model(input_shape):
+    """
+        Baseline + dropout + reducing lr 2019-10-03_22-19
+    """
+
+    model = Sequential()
+    model.add(Conv2D(64, (3, 3), activation='relu', input_shape=input_shape))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+
+    model.add(Conv2D(128, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.5))
+
+    model.add(Conv2D(256, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.5))
+
+
+    model.add(Flatten())
+    model.add(Dense(200, activation='relu'))
+    model.add(Dropout(0.5))
+
+
+    model.add(Dense(120, activation=(tf.nn.softmax)))
+
+    optimizer = RMSprop(lr=5e-5)
+    model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
+
+def load_model_5(input_shape):
+    '''
+        Model used to get to overfit, but after using data augmentation it stopped working
+    '''
     model = Sequential()
     model.add(Conv2D(64, (3, 3), activation='relu', input_shape=input_shape))
     model.add(MaxPooling2D(pool_size=(2, 2)))
@@ -74,6 +135,9 @@ def load_model_3(input_shape):
 
     model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
     return model
+
+
+
 
 def load_model_2(input_shape):
     """
