@@ -6,20 +6,48 @@ import tensorflow as tf
 
 def load_model(input_shape):
     """
+        Reduced VGG16
+    """
+    common_options_cnn = {
+        'activation': 'relu', 'input_shape': input_shape, 'padding': 'same'
+    }
+    model = Sequential()
+    model.add(Conv2D(64, (3, 3), **common_options_cnn))
+    model.add(Conv2D(64, (3, 3), **common_options_cnn))
+    model.add(MaxPooling2D(pool_size=3))
+
+
+    model.add(Conv2D(85, (3, 3), **common_options_cnn))
+    model.add(Conv2D(85, (3, 3), **common_options_cnn))
+    model.add(MaxPooling2D(pool_size=3))
+
+    model.add(Conv2D(106, (3, 3), **common_options_cnn))
+    model.add(Conv2D(106, (3, 3), **common_options_cnn))
+    model.add(MaxPooling2D(pool_size=3))
+
+    model.add(Flatten())
+    model.add(Dense(1000, activation='relu'))
+    model.add(Dense(500, activation='relu'))
+
+    model.add(Dense(120, activation=(tf.nn.softmax)))
+
+    optimizer = RMSprop(lr=1e-1)# this or higher
+    model.compile(optimizer=optimizer,loss='categorical_crossentropy',metrics=['accuracy'])
+    return model
+
+def load_model_5(input_shape):
+    """
         Added dropout
     """
     model = Sequential()
     model.add(Conv2D(64, (3, 3), activation='relu', input_shape=input_shape))
     model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.2))
 
     model.add(Conv2D(128, (3, 3), activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.5))
 
     model.add(Conv2D(256, (3, 3), activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.5))
 
     model.add(Flatten())
     model.add(Dense(200, activation='relu'))

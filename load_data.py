@@ -1,7 +1,7 @@
 from keras.preprocessing.image import ImageDataGenerator
 from os import path
 
-IMAGE_ROWS, IMAGE_COLS = 225, 300
+IMAGE_ROWS, IMAGE_COLS = 224, 300
 
 common_options = {
     'rescale': 1./255
