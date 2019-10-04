@@ -7,7 +7,8 @@ import tensorflow as tf
 
 def load_model(input_shape, gpus_number):
     """
-        Reduced VGG16
+        Reduced VGG16 + increase dropout to decrease overfitting
+        2019-10-04_18-21
     """
     common_options_cnn = {
         'activation': 'relu', 'input_shape': input_shape, 'padding': 'same'
@@ -34,13 +35,87 @@ def load_model(input_shape, gpus_number):
 
     if gpus_number > 1:
         model = multi_gpu_model(model, gpus=gpus_number)
+    optimizer = RMSprop(lr=0.0032)# 1e-3 this or higher discarded: 1e-1, 1e-2
+    model.compile(optimizer=optimizer,loss='categorical_crossentropy',metrics=['accuracy'])
+    return model
+
+def load_model_9(input_shape, gpus_number):
+    """
+        Reduced VGG16
+    """
+    common_options_cnn = {
+        'activation': 'relu', 'input_shape': input_shape, 'padding': 'same'
+    }
+    model = Sequential()
+    model.add(Conv2D(64, (3, 3), **common_options_cnn))
+    model.add(Conv2D(64, (3, 3), **common_options_cnn))
+    model.add(MaxPooling2D(pool_size=3))
+
+
+    model.add(Conv2D(85, (3, 3), **common_options_cnn))
+    model.add(Conv2D(85, (3, 3), **common_options_cnn))
+    model.add(MaxPooling2D(pool_size=3))
+
+    model.add(Conv2D(106, (3, 3), **common_options_cnn))
+    model.add(Conv2D(106, (3, 3), **common_options_cnn))
+    model.add(MaxPooling2D(pool_size=3))
+
+    model.add(Flatten())
+    model.add(Dropout(0.3))
+    model.add(Dense(1000, activation='relu'))
+    model.add(Dropout(0.2))
+    model.add(Dense(500, activation='relu'))
+    model.add(Dropout(0.2))
+
+
+    model.add(Dense(120, activation=(tf.nn.softmax)))
+    model.add(Dropout(0.1))
+
+
+    if gpus_number > 1:
+        model = multi_gpu_model(model, gpus=gpus_number)
     optimizer = RMSprop(lr=1e-3)# 1e-3 this or higher discarded: 1e-1, 1e-2
     model.compile(optimizer=optimizer,loss='categorical_crossentropy',metrics=['accuracy'])
     return model
 
-def load_model_5(input_shape):
+def load_model_8(input_shape):
     """
-        Added dropout
+        Reduced VGG16 + dropout
+        2019-10-04_14-40 47% train, 24% val, 25% test
+    """
+    common_options_cnn = {
+        'activation': 'relu', 'input_shape': input_shape, 'padding': 'same'
+    }
+    model = Sequential()
+    model.add(Conv2D(64, (3, 3), **common_options_cnn))
+    model.add(Conv2D(64, (3, 3), **common_options_cnn))
+    model.add(MaxPooling2D(pool_size=3))
+
+
+    model.add(Conv2D(85, (3, 3), **common_options_cnn))
+    model.add(Conv2D(85, (3, 3), **common_options_cnn))
+    model.add(MaxPooling2D(pool_size=3))
+
+    model.add(Conv2D(106, (3, 3), **common_options_cnn))
+    model.add(Conv2D(106, (3, 3), **common_options_cnn))
+    model.add(MaxPooling2D(pool_size=3))
+
+    model.add(Flatten())
+    model.add(Dropout(0.2))
+    model.add(Dense(1000, activation='relu'))
+    model.add(Dropout(0.2))
+    model.add(Dense(500, activation='relu'))
+    model.add(Dropout(0.2))
+
+    model.add(Dense(120, activation=(tf.nn.softmax)))
+
+    optimizer = RMSprop(lr=1e-3)# 1e-3 this or higher
+    model.compile(optimizer=optimizer,loss='categorical_crossentropy',metrics=['accuracy'])
+    return model
+
+
+def load_model_7(input_shape):
+    """
         Baseline + dropout only on FC layers + increasing lr + 2019-10-04_08-37
     """
 
