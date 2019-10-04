@@ -1,10 +1,11 @@
 from keras.models import Sequential
 from keras.optimizers import RMSprop
+from keras.utils.training_utils import multi_gpu_model
 from keras.layers import Dense, Activation, Conv2D, MaxPooling2D, Flatten, Dropout
 from keras import regularizers
 import tensorflow as tf
 
-def load_model(input_shape):
+def load_model(input_shape, gpus_number):
     """
         Reduced VGG16
     """
@@ -31,7 +32,9 @@ def load_model(input_shape):
 
     model.add(Dense(120, activation=(tf.nn.softmax)))
 
-    optimizer = RMSprop(lr=1e-1)# 1e-3 this or higher
+    if gpus_number > 1:
+        model = multi_gpu_model(model, gpus=gpus_number)
+    optimizer = RMSprop(lr=1e-3)# 1e-3 this or higher discarded: 1e-1, 1e-2
     model.compile(optimizer=optimizer,loss='categorical_crossentropy',metrics=['accuracy'])
     return model
 

@@ -7,18 +7,23 @@ out_file_name = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M')
 
 if len(sys.argv) > 1:
     out_file_name = sys.argv[1]
+if len(sys.argv) > 2:
+    gpus_number = int(sys.argv[2])
+else:
+    gpus_number = 1
 
 from load_data import load_data
 train_generator, valid_generator, test_generator = load_data('./data/')
 input_shape = train_generator.image_shape
 
 from load_model import load_model
-model = load_model(input_shape)
+model = load_model(input_shape, gpus_number)
+
 
 #Start training
 STEP_SIZE_TRAIN=train_generator.n//train_generator.batch_size
 STEP_SIZE_VALID=valid_generator.n//valid_generator.batch_size
-early_stopping = EarlyStopping(monitor='val_loss', min_delta=0.005, patience=5, verbose=0, mode='auto')
+early_stopping = EarlyStopping(monitor='val_loss', min_delta=0.005, patience=10, verbose=0, mode='auto')
 tensorboard_callback = TrainValTensorBoard(log_dir=path.join('./out/', out_file_name, 'tensorboard.log'))
 history = model.fit_generator(generator=train_generator,
                     steps_per_epoch=STEP_SIZE_TRAIN,
