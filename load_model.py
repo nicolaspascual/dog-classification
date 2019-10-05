@@ -28,10 +28,14 @@ def load_model(input_shape, gpus_number):
     model.add(MaxPooling2D(pool_size=3))
 
     model.add(Flatten())
+    model.add(Dropout(0.3))
     model.add(Dense(1000, activation='relu'))
+    model.add(Dropout(0.2))
     model.add(Dense(500, activation='relu'))
+    model.add(Dropout(0.2))
 
     model.add(Dense(120, activation=(tf.nn.softmax)))
+    model.add(Dropout(0.1))
 
     if gpus_number > 1:
         model = multi_gpu_model(model, gpus=gpus_number)
@@ -61,15 +65,13 @@ def load_model_9(input_shape, gpus_number):
     model.add(MaxPooling2D(pool_size=3))
 
     model.add(Flatten())
-    model.add(Dropout(0.3))
+    model.add(Dropout(0.2))
     model.add(Dense(1000, activation='relu'))
     model.add(Dropout(0.2))
     model.add(Dense(500, activation='relu'))
     model.add(Dropout(0.2))
 
-
     model.add(Dense(120, activation=(tf.nn.softmax)))
-    model.add(Dropout(0.1))
 
 
     if gpus_number > 1:
